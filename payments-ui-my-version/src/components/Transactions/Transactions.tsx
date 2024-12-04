@@ -1,23 +1,44 @@
+import { ChangeEvent, useState } from 'react';
+import { getAllPayments } from '../../data/DataFunctions';
+import PaymentTableRow from './PaymentTableRow';
 import './Transactions.css';
 
-const Transactions = () => {
-    return (
-      <table className="transactionsTable">
+const Transactions  = () : JSX.Element => {
+
+    const payments = getAllPayments();
+
+    const countries : string[] = payments.map((payment) => payment.country);
+    //const uniqueCountries : string[] = countries.filter((country, index) => countries.indexOf(country) === index);
+    const uniqueCountries : string[] = Array.from(new Set(countries));
+
+    const countryOptions : JSX.Element[] = uniqueCountries.map(c => <option key={c} value={c}>{c}</option>);
+
+    const [selectedCountry , setSelectedCountry] = useState<string>(uniqueCountries[0])
+
+    const changeCountry = (e : ChangeEvent<HTMLSelectElement>) => {
+        const option = e.target.options.selectedIndex;
+        setSelectedCountry(uniqueCountries[option]);
+    }
+
+    const countrySelector : JSX.Element = <select id="countrySelector" onChange={changeCountry}>
+        {countryOptions}
+    </select>;
+
+    return (<>
+        <div className="transactionsCountrySelector">
+                Select country: {countrySelector}
+        </div>
+    <table className="transactionsTable">
           <thead>
-                <tr><th>Id</th><th>Date</th><th>Country</th><th>Currency</th><th>Amount</th></tr>
+            <tr><th>Id</th><th>orderId</th><th>Date</th><th>Country</th><th>Currency</th><th>Amount</th></tr>
           </thead>
           <tbody>
-	          <tr>
-	              <td>1</td><td>2020-05-22</td><td>USA</td><td>USD</td><td>17.55</td>
-	          </tr>
-	          <tr>
-	              <td>2</td><td>2020-05-23</td><td>UK</td><td>GBP</td><td>36.50</td>
-	          </tr>
-	          <tr>
-	              <td>3</td><td>2020-05-24</td><td>SWE</td><td>EUR</td><td>42.00</td>
-	          </tr>
+	          {payments
+                .filter( payment => payment.country === selectedCountry)
+                .map((payment) => <PaymentTableRow key={payment.id} payment={payment} />)}
           </tbody>
       </table>
+      </>
     );
 }
 

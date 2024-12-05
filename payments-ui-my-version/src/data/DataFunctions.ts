@@ -25,3 +25,22 @@ export const getAllPayments : () => PaymentType[]
         {id: 112, amount: 600, country: "USA", currency: "USD", date: "2017-02-02", orderId:"21216663", taxCode: 0, taxRate: 0, type: "SALE"}
     ]
 }
+
+const countryCode :string = 'USA'
+export const getAllPaymentsRestVersion = ()=>{
+   
+    fetch(
+        `https://paymentsdemo.neueda.com/api/payment?country=${countryCode}`,{
+            method: "GET",
+            headers: {
+                "Accept":"application/json"
+            }
+        }
+    ).then((response)=> {
+            const data = response.json()
+            console.log("=====> getAllPaymentsRestVersion Data",data);
+            
+    })
+}
+    
+

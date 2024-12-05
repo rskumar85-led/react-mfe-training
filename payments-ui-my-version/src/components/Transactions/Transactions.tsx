@@ -1,9 +1,11 @@
 import { ChangeEvent, useState } from 'react';
-import { getAllPayments } from '../../data/DataFunctions';
+import { getAllPayments, getAllPaymentsRestVersion } from '../../data/DataFunctions';
 import PaymentTableRow from './PaymentTableRow';
 import './Transactions.css';
 
 const Transactions  = () : JSX.Element => {
+
+    const allPaymentsRestVersion = getAllPaymentsRestVersion()
 
     const payments = getAllPayments();
 

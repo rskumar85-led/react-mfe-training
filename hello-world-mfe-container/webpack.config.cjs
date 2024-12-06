@@ -5,7 +5,7 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 module.exports = {
     mode : 'development',
     devServer : {
-        port : 3009,
+        port : 3010,
         historyApiFallback : {
             index : '/index.html'
         },
@@ -18,10 +18,11 @@ module.exports = {
             template : './index.html'
         }),
         new ModuleFederationPlugin({
-            name : 'helloworldMFE',
-            filename : 'remoteEntry.js',
-            exposes :
-                {'./HelloWorldComponent' : '/src/HelloWorld/indexHelloWorld'}
+            name : 'container',
+            remotes :
+                {
+                    helloWorldContainerKey:'helloworldMFE@http://localhost:3009/remoteEntry.js'
+                }
             }
         )
     ],
